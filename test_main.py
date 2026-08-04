@@ -1,4 +1,5 @@
 from main import BooksCollector
+import pytest
 
 # класс TestBooksCollector объединяет набор тестов, которыми мы покрываем наше приложение BooksCollector
 # обязательно указывать префикс Test
@@ -70,5 +71,19 @@ class TestBooksCollector:
 
         assert collector.get_list_of_favorites_books() == []
 
+    @pytest.mark.parametrize("name, genre", 
+            [
+                ('Гордость и предубеждение и зомби', 'Фантастика'),
+                ('Что делать, если ваш кот хочет вас убить', 'Комедии'),
+                ('Гарри Поттер', 'Фантастика'),
+                ('Ведьмак', 'Фантастика'),
+                ('Стивен Кинг', 'Ужасы')
+            ]) 
+    def test_add_book_in_favorites(self, name, genre):
+        collector = BooksCollector()
 
+        collector.add_new_book(name)
+        collector.set_book_genre(name, genre)
+        collector.add_book_in_favorites(name)
 
+        assert collector.get_list_of_favorites_books() == [name]
