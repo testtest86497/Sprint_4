@@ -71,19 +71,28 @@ class TestBooksCollector:
 
         assert collector.get_list_of_favorites_books() == []
 
-    @pytest.mark.parametrize("name, genre", 
+    @pytest.mark.parametrize("name", 
             [
-                ('Гордость и предубеждение и зомби', 'Фантастика'),
-                ('Что делать, если ваш кот хочет вас убить', 'Комедии'),
-                ('Гарри Поттер', 'Фантастика'),
-                ('Ведьмак', 'Фантастика'),
-                ('Стивен Кинг', 'Ужасы')
+                'Преступление и наказание в большом городе',
+                'Преступление и наказание в большом городе!',
+                ''
             ]) 
-    def test_add_book_in_favorites(self, name, genre):
+    def test_add_new_book_with_symbols_over_and_under_limit_show_empty_dict(self, name):
         collector = BooksCollector()
 
         collector.add_new_book(name)
-        collector.set_book_genre(name, genre)
-        collector.add_book_in_favorites(name)
 
-        assert collector.get_list_of_favorites_books() == [name]
+        assert collector.get_books_genre() == {}
+
+
+    @pytest.mark.parametrize("name", [
+        'Г',
+        'Преступление и наказание в большом город',
+
+    ])
+    def test_add_new_book_with_symbols_in_limit_show_dict_with_books(self, name):
+        collector = BooksCollector()
+
+        collector.add_new_book(name)
+
+        assert name in collector.get_books_genre()
